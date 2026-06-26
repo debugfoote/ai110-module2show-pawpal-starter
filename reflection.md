@@ -1,16 +1,36 @@
 # PawPal+ Project Reflection
 
 ## 1. System Design
+a. Initial design
 
-**a. Initial design**
+Briefly describe your initial UML design.
+What classes did you include, and what responsibilities did you assign to each?
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+b. Design changes
 
-**b. Design changes**
+Did your design change during implementation?
+If yes, describe at least one change and why you made it.
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+
+Core Actions:
+
+1. user should be able to add and manage pet care tasks
+2. Enter pet and owner information
+3. Generate and view the pet care tasks based on priority, time availablility, preference
+
+Brainstorm 
+Classes:
+Owner
+Attributes: owner_name, availbility,
+Methods: add_pet, set_preference, update_preference
+Pet
+Attributes: pet_name, species, age, breed, pet_needs
+Methods: add_pet_needs(), update_pet_needs, 
+Task
+Attributes: title, duration, priority,task_details, recurring
+Schedule
+Methods: mark_complete(), update_duration, uodate_priority
+
 
 ---
 

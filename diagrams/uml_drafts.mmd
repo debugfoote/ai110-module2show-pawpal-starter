@@ -1,0 +1,45 @@
+classDiagram
+    %% PawPal+ Core Class Diagram
+
+    class Owner {
+        +String name
+        +int availability_minutes
+        +List~String~ preferences
+        +addPet(pet: Pet)
+        +setPreference(pref: String)
+        +updateAvailability(minutes: int)
+    }
+
+    class Pet {
+        +String name
+        +String species
+        +int age
+        +String breed
+        +updateInfo()
+    }
+
+    class Task {
+        +String title
+        +int duration_minutes
+        +int priority
+        +bool recurring
+        +bool completed
+        +markComplete()
+        +updateDuration(minutes: int)
+    }
+
+    class Schedule {
+        +date: String
+        +List~Task~ scheduled_tasks
+        +generateSchedule(owner: Owner, tasks: List~Task~)
+        +explainDecisions()
+        +sortByPriority()
+        +filterByAvailability(availability: int)
+    }
+
+    %% Relationships
+    Owner "1" --> "*" Pet : owns
+    Pet "1" --> "*" Task : has
+    Schedule "1" --> "*" Task : contains
+    Schedule "1" --> "1" Owner : views
+
