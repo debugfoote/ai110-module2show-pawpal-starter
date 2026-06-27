@@ -55,6 +55,34 @@ Paste a sample of your app's CLI or Streamlit output here so a reader can see wh
 #   ...
 ```
 
+***
+Today's Schedule
+Owner: Mekayla
+
+Pet: Luna
+Task: Morning walk
+Duration: 30 minutes
+Priority: 5
+
+Pet: Luna
+Task: Feeding
+Duration: 15 minutes
+Priority: 4
+
+Pet: Bruno
+Task: Playtime
+Duration: 20 minutes
+Priority: 3
+
+Pet: Bruno
+Task: Grooming
+Duration: 10 minutes
+Priority: 2
+
+
+
+***
+
 ## 🧪 Testing PawPal+
 
 ```bash
