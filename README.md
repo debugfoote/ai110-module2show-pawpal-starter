@@ -105,10 +105,10 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | `Schedule.sort_by_priority()`; `Schedule.sort_by_time()`; `Schedule.generate()` | Sorting used when generating and when explicitly re-ordering scheduled items. `generate()` applies a compound sort by priority, duration, and title to choose tasks that fit available time. |
+| Filtering | `Owner.filter_tasks()`; `Owner.get_all_tasks()`; `Schedule.filter_by_availability()` | `Owner.filter_tasks()` and `get_all_tasks()` filter by pet name and completed status. `Schedule.filter_by_availability()` trims scheduled tasks so total duration fits the available minutes. |
+| Conflict detection | `Schedule.detect_time_conflicts()` | Lightweight detection that parses `time_of_day` strings (HH:MM) and show warnings when two tasks have the same start time. Invalid time strings produce warnings rather than exceptions. |
+| Recurring tasks | `Task.mark_complete()`; `Task.create_next_occurrence()`; `Pet.mark_task_complete()` | Recurring tasks (daily/weekly) produce the next occurrence when completed; `mark_complete()` returns the next `Task` which `Pet.mark_task_complete()` re-attaches to the pet. |
 
 ## 📸 Demo Walkthrough
 

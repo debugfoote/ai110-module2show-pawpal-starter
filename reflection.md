@@ -46,6 +46,19 @@ Methods: mark_complete(), update_duration, uodate_priority
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
 
+
+
+
+
+
+One tradeoff in my scheduler is that the conflict detection algorithm only checks whether two tasks have the exact same scheduled start time. This approach keeps the algorithm simple, and easy to understand, but it however does not detect overlapping tasks with different start times. For example, a task from 9:00–9:30 and another from 9:15–9:45. A more advanced scheduler could use each task's duration to calculate start and end times and detect all overlapping appointments.
+
+
+
+
+
+
+
 ---
 
 ## 3. AI Collaboration
