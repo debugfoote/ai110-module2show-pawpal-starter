@@ -131,10 +131,54 @@ Confidence Level 5/5 - All 11 test passed successful. The test also covered the 
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Enter the owner’s name and available minutes, then create one or more pets with name, species, age, and breed.
+2. Select a pet from the dropdown to manage that pet’s care tasks.
+3. Add tasks for the selected pet, including duration, priority, optional time, and recurrence.
+
+4.  Edit, delete, or mark tasks complete as needed from the task management controls.
+5. Generate a schedule to see which tasks fit, view any time conflicts, and get suggestions for resolving overlaps.
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->
+
+$ PYTHONPATH=. python3 main.py
+Today's Schedule
+Owner: Mekayla
+
+Pending tasks for all pets (sorted by time):
+Pet: Luna
+Task: Morning walk
+Time: 08:00
+Duration: 30 minutes
+Priority: 5
+
+Pet: Bruno
+Task: Nap time
+Time: 14:00
+Duration: 10 minutes
+Priority: 3
+
+Pet: Bruno
+Task: Playtime
+Time: 14:00
+Duration: 20 minutes
+Priority: 3
+
+Pet: Bruno
+Task: Grooming
+Time: 17:00
+Duration: 10 minutes
+Priority: 2
+
+Time conflict warnings:
+- Warning: Nap time (Bruno) and Playtime (Bruno) overlap at 14:00.
+- Suggestion: Consider moving 'Playtime' to 06:00.
+
+Tasks for Luna only:
+- Morning walk (pending)
+
+All tasks including completed ones:
+- Feeding (done)
+- Morning walk (pending)
+- Grooming (pending)
+- Playtime (pending)
+- Nap time (pending)

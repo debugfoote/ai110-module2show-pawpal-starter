@@ -1,13 +1,16 @@
 classDiagram
-    %% PawPal+ Core Class Diagram
+    %% PawPal+ final class diagram
 
     class Owner {
         +String name
         +int availability_minutes
-        +List~String~ preferences
-        +addPet(pet: Pet)
-        +setPreference(pref: String)
-        +updateAvailability(minutes: int)
+        +List preferences
+        +List pets
+        +add_pet(pet: Pet)
+        +set_preference(pref: String)
+        +update_availability(minutes: int)
+        +filter_tasks(pet_name: String, include_completed: bool)
+        +get_all_tasks(pet_name: String, include_completed: bool)
     }
 
     class Pet {
@@ -15,7 +18,11 @@ classDiagram
         +String species
         +int age
         +String breed
-        +updateInfo()
+        +List tasks
+        +add_task(task: Task)
+        +mark_task_complete(task: Task)
+        +get_pending_tasks()
+        +update_info(name: String, species: String, age: int, breed: String)
     }
 
     class Task {
@@ -24,22 +31,32 @@ classDiagram
         +int priority
         +bool recurring
         +bool completed
-        +markComplete()
-        +updateDuration(minutes: int)
+        +String time_of_day
+        +String frequency
+        +date due_date
+        +mark_complete()
+        +create_next_occurrence()
+        +update_duration(minutes: int)
+        +is_eligible()
     }
 
     class Schedule {
-        +date: String
-        +List~Task~ scheduled_tasks
-        +generateSchedule(owner: Owner, tasks: List~Task~)
-        +explainDecisions()
-        +sortByPriority()
-        +filterByAvailability(availability: int)
+        +String date
+        +List scheduled_tasks
+        +List conflicts
+        +List time_conflict_warnings
+        +Owner owner
+        +generate_schedule(owner: Owner, tasks: List)
+        +explain_decisions()
+        +sort_by_priority()
+        +detect_time_conflicts(tasks: List)
+        +sort_by_time()
+        +filter_by_availability(availability: int)
     }
 
     %% Relationships
     Owner "1" --> "*" Pet : owns
     Pet "1" --> "*" Task : has
     Schedule "1" --> "*" Task : contains
-    Schedule "1" --> "1" Owner : views
+    Schedule "0..1" --> "1" Owner : uses
 

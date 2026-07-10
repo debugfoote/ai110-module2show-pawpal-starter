@@ -58,10 +58,8 @@ def test_detect_time_conflicts_reports_overlapping_times() -> None:
 
     warnings = schedule.detect_time_conflicts()
 
-    assert len(warnings) == 1
-    assert "Morning walk" in warnings[0]
-    assert "Feed breakfast" in warnings[0]
-    assert "08:00" in warnings[0]
+    # We should at least have an overlap warning mentioning both tasks and the time.
+    assert any("Morning walk" in w and "Feed breakfast" in w and "08:00" in w for w in warnings)
 
 
 def test_adding_task_increases_pet_task_count() -> None:
@@ -72,6 +70,17 @@ def test_adding_task_increases_pet_task_count() -> None:
     pet.add_task(task)
 
     assert len(pet.tasks) == initial_task_count + 1
+
+
+def test_owner_can_add_multiple_pets_with_same_values() -> None:
+    owner = Owner(name="Jordan", availability_minutes=120)
+    pet1 = Pet(name="Unnamed", species="dog", age=0, breed="Unknown")
+    pet2 = Pet(name="Unnamed", species="dog", age=0, breed="Unknown")
+
+    owner.add_pet(pet1)
+    owner.add_pet(pet2)
+
+    assert len(owner.pets) == 2
 
 
 def test_schedule_generate_populates_scheduled_tasks() -> None:
@@ -190,3 +199,66 @@ def test_sort_by_time_orders_tasks_by_hhmm_strings() -> None:
         "Lunch break",
         "Feed dinner",
     ]
+
+
+def test_invalid_time_inputs_produce_warnings() -> None:
+    schedule = Schedule()
+    schedule.scheduled_tasks = [
+        Task(title="Bad time", duration_minutes=10, priority=1, time_of_day="25:00"),
+        Task(title="Good time", duration_minutes=10, priority=1, time_of_day="08:00"),
+    ]
+
+    warnings = schedule.detect_time_conflicts()
+
+    assert any("invalid time" in w.lower() for w in warnings)
+
+
+def test_pet_delete_task() -> None:
+    pet = Pet(name="Luna", species="Cat", age=2, breed="Siamese")
+    task = Task(title="Play", duration_minutes=15, priority=1)
+    pet.add_task(task)
+    assert task in pet.tasks
+
+    removed = pet.delete_task(task)
+    assert removed is True
+    assert task not in pet.tasks
+
+
+def test_task_update_details() -> None:
+    task = Task(title="Old", duration_minutes=10, priority=1)
+    task.update_details(title="New", duration_minutes=20, priority=3, time_of_day="09:00")
+    assert task.title == "New"
+    assert task.duration_minutes == 20
+    assert task.priority == 3
+    assert task.time_of_day == "09:00"
+
+
+def test_conflicts_detected_across_multiple_pets() -> None:
+    owner = Owner(name="Alex", availability_minutes=120)
+    p1 = Pet(name="A", species="dog", age=1, breed="mix")
+    p2 = Pet(name="B", species="cat", age=2, breed="mix")
+    owner.add_pet(p1)
+    owner.add_pet(p2)
+
+    p1.add_task(Task(title="Walk A", duration_minutes=20, priority=2, time_of_day="08:00"))
+    p2.add_task(Task(title="Feed B", duration_minutes=10, priority=1, time_of_day="08:00"))
+
+    schedule = Schedule()
+    schedule.generate(owner, owner.get_all_tasks())
+
+    warnings = schedule.time_conflict_warnings
+    assert any("Walk A" in w and "Feed B" in w for w in warnings if "overlap" in w.lower())
+
+
+def test_recurring_tasks_maintain_frequency_in_explain() -> None:
+    owner = Owner(name="Jordan", availability_minutes=60)
+    pet = Pet(name="Mochi", species="Cat", age=2, breed="Tabby")
+    owner.add_pet(pet)
+
+    pet.add_task(Task(title="Feed breakfast", duration_minutes=10, priority=2, recurring=True, frequency="daily", time_of_day="08:00"))
+
+    schedule = Schedule()
+    schedule.generate(owner, owner.get_all_tasks())
+
+    explanation = schedule.explain_decisions()
+    assert "repeats daily" in explanation or "repeats weekly" in explanation
