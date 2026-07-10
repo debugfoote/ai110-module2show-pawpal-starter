@@ -11,6 +11,59 @@ def test_mark_complete_updates_task_status() -> None:
     assert task.completed is True
 
 
+def test_sort_by_time_orders_tasks_chronologically() -> None:
+    # The scheduler uses HH:MM strings as its ordering key, so earlier times should move first.
+    schedule = Schedule()
+    schedule.scheduled_tasks = [
+        Task(title="Feed dinner", duration_minutes=10, priority=2, time_of_day="19:30"),
+        Task(title="Morning walk", duration_minutes=20, priority=3, time_of_day="08:00"),
+        Task(title="Lunch break", duration_minutes=15, priority=1, time_of_day="12:15"),
+    ]
+
+    schedule.sort_by_time()
+
+    assert [task.title for task in schedule.scheduled_tasks] == [
+        "Morning walk",
+        "Lunch break",
+        "Feed dinner",
+    ]
+
+
+def test_marking_daily_task_complete_creates_next_day_task() -> None:
+    # Daily recurring tasks should be marked complete and produce a fresh task with the next due date.
+    task = Task(
+        title="Feed breakfast",
+        duration_minutes=10,
+        priority=2,
+        recurring=True,
+        frequency="daily",
+        due_date=date(2026, 7, 6),
+    )
+
+    next_task = task.mark_complete()
+
+    assert task.completed is True
+    assert next_task is not None
+    assert next_task.completed is False
+    assert next_task.due_date == date(2026, 7, 7)
+
+
+def test_detect_time_conflicts_reports_overlapping_times() -> None:
+    # Two tasks with the same time slot should generate a warning that describes the overlap.
+    schedule = Schedule()
+    schedule.scheduled_tasks = [
+        Task(title="Morning walk", duration_minutes=20, priority=3, time_of_day="08:00"),
+        Task(title="Feed breakfast", duration_minutes=10, priority=2, time_of_day="08:00"),
+    ]
+
+    warnings = schedule.detect_time_conflicts()
+
+    assert len(warnings) == 1
+    assert "Morning walk" in warnings[0]
+    assert "Feed breakfast" in warnings[0]
+    assert "08:00" in warnings[0]
+
+
 def test_adding_task_increases_pet_task_count() -> None:
     pet = Pet(name="Milo", species="Dog", age=3, breed="Golden Retriever")
     task = Task(title="Feed dinner", duration_minutes=10, priority=1)

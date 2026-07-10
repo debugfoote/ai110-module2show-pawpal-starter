@@ -92,12 +92,26 @@ pytest
 # Run with coverage:
 pytest --cov
 ```
+Test Covers
+
+The test suite verifies the core functionality of the PawPal+ app which includes:
+
+*   Task scheduling based on owner availability
+*   Sorting tasks in chronological order
+*   Daily recurring task creation
+*   Time conflict detection for duplicate task times
+*   Task filtering and completion behavior
+
 
 Sample test output:
 
 ```
 # Paste your pytest output here
 ```
+..........                       [100%]
+11 passed in 0.03s
+
+Confidence Level 5/5 - All 11 test passed successful. The test also covered the core functionality which includes sorting, recurrence, conflict detection, filtering etc.
 
 ## 📐 Smarter Scheduling
 
@@ -109,6 +123,9 @@ Sample test output:
 | Filtering | `Owner.filter_tasks()`; `Owner.get_all_tasks()`; `Schedule.filter_by_availability()` | `Owner.filter_tasks()` and `get_all_tasks()` filter by pet name and completed status. `Schedule.filter_by_availability()` trims scheduled tasks so total duration fits the available minutes. |
 | Conflict detection | `Schedule.detect_time_conflicts()` | Lightweight detection that parses `time_of_day` strings (HH:MM) and show warnings when two tasks have the same start time. Invalid time strings produce warnings rather than exceptions. |
 | Recurring tasks | `Task.mark_complete()`; `Task.create_next_occurrence()`; `Pet.mark_task_complete()` | Recurring tasks (daily/weekly) produce the next occurrence when completed; `mark_complete()` returns the next `Task` which `Pet.mark_task_complete()` re-attaches to the pet. |
+
+
+
 
 ## 📸 Demo Walkthrough
 
